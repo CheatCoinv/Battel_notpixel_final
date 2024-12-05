@@ -1,0 +1,9 @@
+/node_modules
+.env
+database*
+test*
+request.json
+yarn.lock
+image/positions.js
+image/templates.js
+image/token.txt
