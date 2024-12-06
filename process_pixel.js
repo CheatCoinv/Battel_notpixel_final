@@ -7,7 +7,7 @@ export const get_pixel = async (IMAGE_INFO) => {
     const template = TEMPLATES[IMAGE_INFO.id];
     if (template) {
       const data = await exportImageToPixel(IMAGE_INFO, "real_time.png");
-      const diff_point = findMismatchesWithLimit(data, template);
+      const diff_point = findMismatchesWithLimit(data, template,300);
       const list_pixels = [];
       Object.keys(diff_point).forEach((pos) => {
         list_pixels.push({ pixelId: parseInt(pos), newColor: template[pos] });

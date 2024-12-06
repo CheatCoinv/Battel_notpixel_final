@@ -20,6 +20,21 @@ const convertWebPToPngAndProcess = async (inputFilePath, outputFilePath) => {
     return false;
   }
 };
+const random = (min, max) => { 
+  return Math.floor(Math.random() * (max - min + 1)) + min; 
+};
+const getRandomPixels = (queue) => { 
+  let result = []; 
+  const keys = Object.keys(queue[0]); 
+ 
+  const randomKey = keys[random(0, keys.length)]; 
+  const randomElement = { 
+    pixelId: parseInt(randomKey), 
+    newColor: queue[0][randomKey], 
+  }; 
+  result.push(randomElement); 
+  return result; 
+};
 app.post("/upload", async (req, res) => {
   const binaryData = req.body;
   if (!binaryData || binaryData.length === 0) {
@@ -42,8 +57,6 @@ app.post("/upload", async (req, res) => {
   }
 });
 app.post("/get_pixel", async (req, res) => {
-  console.log(req.body);
-  let count = 1;
   try {
     const { id, x, y, size } = req.body;
     const TEMP_INFO = {
@@ -57,14 +70,13 @@ app.post("/get_pixel", async (req, res) => {
       excluded_bottom_rigth_x: 0,
       excluded_bottom_rigth_y: 0,
     };
-    console.log(TEMP_INFO);
     let data;
     if (TEMP_INFO.id) {
       data = await get_pixel(TEMP_INFO);
-      console.log(data);
+      
     }
     if (data && data.length > 0) {
-      res.status(200).json({ success: 1, data: data[0] });
+      res.status(200).json({ success: 1, data: data[random(0,data.length)] });
     } else {
       res.status(400).json({ success: 0, data: [] });
     }
@@ -74,7 +86,7 @@ app.post("/get_pixel", async (req, res) => {
   }
 });
 
-const PORT = 3000;
+const PORT = 7000;
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
